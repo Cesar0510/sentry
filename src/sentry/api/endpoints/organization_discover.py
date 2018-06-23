@@ -56,17 +56,19 @@ class OrganizationDiscoverEndpoint(OrganizationMemberEndpoint):
             'project_id': data['projects']
         } if 'projects' in data else None
 
-        selected_columns = data.get('fields')
+        aggregations = data.get('aggregations', [])
+
+        has_aggregations = len(aggregations) > 0
+
+        selected_columns = [] if has_aggregations else data.get('fields')
+
+        groupby = data.get('fields') if has_aggregations else []
 
         orderby = data.get('orderby', '-last_seen')
 
         conditions = data.get('conditions')
 
-        limit = data.get('limit', 1000)
-
-        aggregations = data.get('aggregations')
-
-        groupby = data.get('groupby')
+        limit = data.get('limit')
 
         rollup = data.get('rollup')
 
